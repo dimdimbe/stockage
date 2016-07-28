@@ -5,8 +5,8 @@ let _state = {},
   _subscribers = [],
   _context;
 
-// Storage Class
-export default class Storage {
+// Stockage Class
+export default class Stockage {
 
   constructor( params ){
 
@@ -31,8 +31,8 @@ export default class Storage {
   subscribe( subscriber , method ){
 
     // Set a Subscriber Id
-    if( subscriber && !subscriber.__storage__subscriber__id ){
-      subscriber.__storage__subscriber__id = Guid();
+    if( subscriber && !subscriber.__stockage__subscriber__id ){
+      subscriber.__stockage__subscriber__id = Guid();
     }
 
     // Push the Subscriber to the Array
@@ -47,7 +47,7 @@ export default class Storage {
 
     // Reduce the Array to remove the subscriber
     _subscribers = _subscribers.reduce( ( subscribers, current ) => {
-      if( current.subscriber.__storage__subscriber__id !== subscriber.__storage__subscriber__id ){
+      if( current.subscriber.__stockage__subscriber__id !== subscriber.__stockage__subscriber__id ){
         subscribers.push( current );
       }
       return subscribers;
@@ -64,11 +64,11 @@ export default class Storage {
       // Return an error if the method is not an existing function
 
       if( !method ){
-        return console.error( "The Storage method '" + name + "' is not defined" );
+        return console.error( "The Stockage method '" + name + "' is not defined" );
       }
 
       if( typeof method !== 'function' ){
-        return console.error( "The Storage method '" + name + "' is not a function" );
+        return console.error( "The Stockage method '" + name + "' is not a function" );
       }
 
       // I get arguments array
