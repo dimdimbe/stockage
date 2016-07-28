@@ -1,3 +1,5 @@
+// Const
+const __STORAGE = '__storage__subscriber__'
 
 // Private variables
 let _state = {},
@@ -28,11 +30,11 @@ export default class Stockage {
 
   getState(){ return state(); }
 
-  subscribe( subscriber , method ){
-
+  subscribe( subscriber , methodName ){
+    let method = subscriber[methodName]
     // Set a Subscriber Id
-    if( subscriber && !subscriber.__stockage__subscriber__id ){
-      subscriber.__stockage__subscriber__id = Guid();
+    if( subscriber && !subscriber[ __STORAGE+methodName ] ){
+      subscriber[ __STORAGE+methodName ] = Guid();
     }
 
     // Push the Subscriber to the Array
@@ -43,13 +45,20 @@ export default class Stockage {
 
   }
 
-  unsubscribe( subscriber ){
+  unsubscribe( subscriber, methodName ){
 
     // Reduce the Array to remove the subscriber
     _subscribers = _subscribers.reduce( ( subscribers, current ) => {
-      if( current.subscriber.__stockage__subscriber__id !== subscriber.__stockage__subscriber__id ){
+
+      if( current.subscriber[ __STORAGE+methodName ] &&
+          ( current.subscriber[ __STORAGE+methodName ] === subscriber[ __STORAGE+methodName ] )
+        ){
+        delete subscriber[__STORAGE+methodName]
+
+      }else{
         subscribers.push( current );
       }
+
       return subscribers;
     }, [] );
 

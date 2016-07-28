@@ -17,16 +17,15 @@ let state = YourStock.getState();
 The method ***subscribe*** return a copy of the stockage state and give you the hability to run a function each time the state change.
 
 ```javascript
-YourStock.subscribe(anObject,aMethod);
+YourStock.subscribe(anObject,'aMethodName');
 ```
 
 ### unsubscribe
 The method ***unsubscribe*** doesn't return anything.
 
 ```javascript
-YourStock.unsubscribe(anObject);
+YourStock.unsubscribe(anObject,'aMethodName');
 ```
-
 ## Define a Stockage
 This is an example of how do we define a ***stockage***.
 
@@ -58,6 +57,21 @@ class AppStock extends Stockage{
 let appStock = new AppStock();
 export default appStock;
 ```
+## Listen to Stockage change
+This is how we listen the state's change of a ***Stockage***.
+```javascript
+import AppStock from './AppStock';
+
+let anObject = {
+  onChange : function(state){
+    console.log('State change to :',state);
+  }
+}
+
+AppStock.subcribe(anObject,'onChange');
+//AppStock.unsubcribe(anObject,'onChange');
+
+```
 ## Link it to a react component
 This is how we ***link*** the state of a ***React*** component with the state of a ***Stockage***.
 ```javascript
@@ -68,11 +82,11 @@ class App extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = AppStock.subscribe(this,this.setState);
+    this.state = AppStock.subscribe(this,'setState');
   }
 
   componentWillUnmount(){
-    AppStock.unsubscribe(this);
+    AppStock.unsubscribe(this,'setState');
   }
 
   render(){
