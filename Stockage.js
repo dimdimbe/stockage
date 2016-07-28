@@ -79,7 +79,7 @@ export default class Stockage {
         let res = callback.apply( null , [ state() ] );
         if( res ){
           _state = res;
-          _context.applyChange();
+          applyChange();
         }
       }
 
@@ -89,22 +89,8 @@ export default class Stockage {
       // If there is a return statement, we apply the change to the state
       if ( res ){
         _state = res;
-        _context.applyChange();
+        applyChange();
       }
-    }
-
-  }
-
-  applyChange(){
-
-    // Notify all subscribers that state has change
-    _subscribers.forEach( ( subscriber, i ) => {
-      subscriber.method.call( subscriber.subscriber, state())
-    } );
-
-    // If options storage is named, we save in localStorage
-    if( _options.storage ){
-      localStorage.setItem( _options.storage, JSON.stringify( state() ) );
     }
 
   }
@@ -112,6 +98,20 @@ export default class Stockage {
 }
 
 // Private methods
+
+function applyChange(){
+
+  // Notify all subscribers that state has change
+  _subscribers.forEach( ( subscriber, i ) => {
+    subscriber.method.call( subscriber.subscriber, state())
+  } );
+
+  // If options storage is named, we save in localStorage
+  if( _options.storage ){
+    localStorage.setItem( _options.storage, JSON.stringify( state() ) );
+  }
+
+}
 
 function state(){
   return Object.assign( {} , _state );
